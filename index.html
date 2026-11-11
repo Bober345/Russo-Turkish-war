@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Интерактивная учебная карта Русско-турецкой войны 1768–1774 годов: государства, города, сражения и условия мира.">
+    <title>Русско-турецкая война 1768–1774 · Интерактивная карта</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js" defer></script>
+</head>
+<body>
+    <header class="page-header">
+        <div><p class="eyebrow">ИСТОРИЧЕСКИЙ АТЛАС · XVIII ВЕК</p><h1>Русско-турецкая война <span>1768–1774</span></h1><p class="subtitle">Исследуй места, события и изменения после войны</p></div>
+        <div class="progress-box"><span class="eyebrow">ТВОЙ ПРОГРЕСС</span><p><strong id="progress">0</strong> / <span id="total">9</span> событий</p><progress id="progressMeter" max="9" value="0" aria-label="Изученные события"></progress><span id="saveStatus" class="small">Сохраняется в этом браузере</span></div>
+    </header>
+    <main id="mainContent">
+        <section class="timeline panel" aria-label="Шкала времени">
+            <div class="timeline-heading"><div><span class="eyebrow">ВРЕМЯ НА КАРТЕ</span><h2><span id="selectedYear">1768</span> <span id="yearSummary">Начало войны</span></h2></div><div class="year-step"><button id="prevYear" type="button" aria-label="Предыдущий год">‹</button><button id="nextYear" type="button" aria-label="Следующий год">›</button></div></div>
+            <div class="timeline-years" id="years"></div>
+            <label class="sr-only" for="timeSlider">Год событий</label><input type="range" id="timeSlider" min="1768" max="1774" value="1768" step="1">
+            <p id="currentEvent" class="current-event" aria-live="polite"></p>
+        </section>
+        <div class="atlas-grid">
+            <section class="map-section panel" aria-label="Интерактивная карта Причерноморья">
+                <div class="map-toolbar"><div><span class="eyebrow">ПРИЧЕРНОМОРЬЕ</span><h2 id="mapCaption">До войны · 1768</h2></div><div class="zoom-tools" role="group" aria-label="Масштаб карты"><button id="zoomOut" type="button" aria-label="Уменьшить масштаб">−</button><output id="zoomValue" aria-live="polite">100%</output><button id="zoomIn" type="button" aria-label="Увеличить масштаб">+</button><button id="resetMap" type="button" title="Показать карту целиком">Вся карта</button></div></div>
+                <fieldset class="layer-controls"><legend class="sr-only">Слои карты</legend><label><input type="checkbox" id="showCountries" checked> Государства</label><label><input type="checkbox" id="showCities" checked> Города</label><label><input type="checkbox" id="showEvents" checked> События</label><label><input type="checkbox" id="showEventLabels" checked> Подписи событий</label></fieldset>
+                <div id="mapViewport" class="map-viewport" tabindex="0" role="region" aria-label="Карта. Используйте кнопки масштаба и прокрутку для перемещения" aria-describedby="mapHelp">
+                    <div class="map-stage" id="mapStage">
+                        <img id="mapImage" class="map-img" src="./assets/images/black_sea_1768.png" width="1511" height="850" alt="Схематическая карта Причерноморья до войны, 1768 год" draggable="false">
+                        <svg id="mapPoints" class="map-overlay" viewBox="0 0 1511 850" aria-label="Государства, города и места событий"><g id="watersLayer" aria-hidden="true"></g><g id="countriesLayer"></g><g id="citiesLayer"></g><g id="eventsLayer"></g></svg>
+                    </div>
+                </div>
+                <div class="map-foot"><p id="mapHelp">Нажми на название или маркер. При увеличении карту можно перетаскивать мышью или прокручивать пальцем.</p><button id="showAll" class="text-button" type="button" aria-pressed="false">Показать события всей войны</button></div>
+                <p class="map-caveat">Учебная схема на исходных изображениях: положение мест приблизительное, границы и цвета подложки обобщены. Бежевый цвет не означает принадлежность всех земель одному государству.</p>
+                <section class="offmap-panel" aria-labelledby="offmapTitle"><p class="eyebrow">ДРУГИЕ ТЕАТРЫ И ТЫЛ</p><h2 id="offmapTitle">За пределами карты</h2><div id="offMapEvents"></div><p class="small">Эти места не входят в охват исходного изображения.</p></section>
+            </section>
+            <aside class="map-sidebar">
+                <section class="panel legend-panel" aria-labelledby="legendTitle"><p class="eyebrow">КАК ЧИТАТЬ КАРТУ</p><h2 id="legendTitle">Легенда</h2><ul class="territory-legend"><li><span class="swatch russian"></span><div><strong>Зелёные области</strong><span>Российская империя на исходной схеме</span></div></li><li><span class="swatch land"></span><div><strong>Бежевые области</strong><span>Османские владения, Крым и соседние земли; смотри подписи</span></div></li><li><span class="swatch sea"></span><div><strong>Голубой цвет</strong><span>Моря и водоёмы</span></div></li></ul><div class="symbol-legend"><span><i class="symbol city"></i> Город / крепость</span><span><i class="symbol land-event">2</i> Сухопутное событие</span><span><i class="symbol sea-event">5</i> Морское сражение</span><span><i class="symbol peace-event">9</i> Дипломатия</span><span><i class="symbol civil-event">7</i> Событие в тылу</span><span><i class="symbol done">✓</i> Вопрос пройден</span><span><i class="symbol acquired"></i> Закреплено за Россией в 1774</span></div><p class="small">Номер маркера соответствует номеру в легенде событий ниже. Метки сражений и мирного договора обозначают места событий, не обязательно города.</p></section>
+                <section class="panel status-panel" aria-labelledby="statusTitle"><p class="eyebrow" id="statusPeriod">НАЧАЛО ВОЙНЫ</p><h2 id="statusTitle">Политическая карта</h2><div id="territoryStatus"></div></section>
+
+            </aside>
+        </div>
+        <section class="panel events-panel" aria-labelledby="eventsHeading"><div class="section-top"><div><p class="eyebrow">МЕСТА, ДАТЫ И ПРИЧИНЫ</p><h2 id="eventsHeading">Легенда событий</h2></div><label class="search-box"><span class="sr-only">Поиск события или места</span><input id="eventSearch" type="search" placeholder="Найти событие или место…" autocomplete="off"><button type="button" id="clearSearch" aria-label="Очистить поиск" hidden>×</button></label></div><div id="eventFilters" class="event-filters" role="group" aria-label="Тип события"></div><p id="eventCount" class="small" role="status"></p><div class="event-list" id="eventList"></div><p class="empty-state" id="emptyState" hidden>Ничего не найдено. Попробуй другое название или выбери «Все типы».</p></section>
+        <section class="panel places-panel" aria-labelledby="placesHeading"><p class="eyebrow">ГЕОГРАФИЧЕСКИЙ УКАЗАТЕЛЬ</p><h2 id="placesHeading">Города и крепости</h2><p class="small">Выбери название, чтобы найти место на карте и прочитать справку.</p><div class="place-index" id="placeIndex"></div></section>
+        <details class="sources panel"><summary>Об источниках и условностях карты</summary><p>Подложка — две авторские иллюстрации из исходного проекта. Подписи нанесены приблизительно; схема не предназначена для измерения границ. До 1773 года включительно используется изображение 1768 года, для 1774 года — изображение после войны. Границы промежуточных кампаний и разделы Речи Посполитой не отрисованы.</p><p>Крымское ханство показано отдельно в подписях: в начале войны — зависимость от Османской империи, с 1772 года — договор с Россией, в 1774 году — признание независимости по мирному договору. Весь Крым не перешёл России в 1774 году.</p><ul><li><a href="https://www.prlib.ru/node/619403" target="_blank" rel="noopener noreferrer">Президентская библиотека — война и Кючук-Кайнарджийский мир</a></li><li><a href="https://rm.shm.ru/core/event/27" target="_blank" rel="noopener noreferrer">Государственный исторический музей — Хотин</a></li><li><a href="https://rm.shm.ru/core/event/30" target="_blank" rel="noopener noreferrer">Государственный исторический музей — Козлуджа</a></li><li><a href="https://navalmuseum.ru/news/memorable?id=747" target="_blank" rel="noopener noreferrer">Центральный военно-морской музей — Чесменское сражение</a></li><li><a href="https://www.vostlit.info/Texts/Dokumenty/Turk/XVIII/1760-1780/Kucuk_Kaynardji_Friede_1770/vetrag_KK_1774.htm" target="_blank" rel="noopener noreferrer">Текст мирного договора 1774 года</a></li></ul><p>Даты боевых событий приведены по старому стилю, новый стиль указан в скобках там, где приведены обе даты.</p></details>
+        <p id="storageNote" class="storage-note" role="status" hidden>Сохранение прогресса недоступно. Он учитывается до перезагрузки вкладки.</p>
+    </main>
+    <div class="modal-bg" id="modalBg" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" aria-describedby="mText" tabindex="-1"><button class="close-btn" id="closeModal" type="button" aria-label="Закрыть окно">×</button><p id="mKind" class="eyebrow"></p><h2 id="mTitle"></h2><p id="mDate" class="date"></p><p id="mText"></p><div id="mLinks" class="modal-links"></div><div class="quiz" id="mQuiz"></div></section></div>
+    <div class="sr-only" id="mapAnnounce" role="status"></div>
+</body>
+</html>
